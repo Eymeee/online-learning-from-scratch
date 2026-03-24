@@ -14,9 +14,6 @@ tps_ml/
 ├── requirements.txt
 ├── README.md
 │
-├── data/
-│   └── load_datasets.py          # Chargement California Housing, Breast Cancer, Adult
-│
 ├── TP1/****
 │   ├── TP1_regression.ipynb      # Notebook principal
 │   ├── polynomial.py             # Modèle poly., MSE, gradient analytique
@@ -42,9 +39,7 @@ tps_ml/
 │   ├── hedge.py                  # Prediction with Expert Advice
 │   └── kernels.py                # Noyaux linéaire, polynomial, gaussien
 │
-└── outputs/
-    ├── figures/                  # Plots exportés (.png)
-    └── tables/                   # Tableaux comparatifs (.csv)
+└── outputs/figures/                  # Plots exportés (.png)
 ```
 
 ---
