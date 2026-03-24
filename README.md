@@ -130,4 +130,4 @@ SGD et SSGD avec mini-lots, estimation du regret, comparaison online vs batch.
 ### TP5 — Apprentissage en ligne supervisé
 Perceptron standard et normalisé, Passive-Aggressive (PA/PA-I/PA-II),
 Online Subgradient Descent, Hedge (experts), régularisation L1/L2 en ligne,
-noyaux linéaire/polynomial/gaussien, normes duales.****
+noyaux linéaire/polynomial/gaussien, normes duales.
