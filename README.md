@@ -9,12 +9,12 @@ l'apprentissage en ligne supervisé.
 ## Structure du projet
 
 ```
-tps_ml/
+online-learning-from-scratch/
 ├── utils.py                      # Briques communes (partagé par tous les TPs)
 ├── requirements.txt
 ├── README.md
 │
-├── TP1/****
+├── TP1/
 │   ├── TP1_regression.ipynb      # Notebook principal
 │   ├── polynomial.py             # Modèle poly., MSE, gradient analytique
 │   └── gradient.py               # Gradient numérique (droite/gauche/centré)
