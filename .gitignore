@@ -36,5 +36,6 @@ Thumbs.db
 .vscode/
 .idea/
 *.cursor/
+.cursor/
 .codex
 IMPLEMENTATION_ORDER.md
