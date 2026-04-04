@@ -14,6 +14,8 @@ Contenu :
 
 import numpy as np
 import matplotlib.pyplot as plt
+import math
+import numbers
 from collections import defaultdict
 
 
@@ -52,6 +54,21 @@ def greedy_epsilon_cover(A, epsilon, dist="euclidean"):
     return centers, len(centers_idx)
 
 
+def empirical_covering_number(objects, epsilon, metric="l2"):
+    """Retourne le nombre de boules d'une epsilon-couverture empirique."""
+    if epsilon <= 0:
+        raise ValueError("epsilon must be strictly positive")
+
+    metric = metric.lower()
+    metric_aliases = {"l2": "euclidean", "euclidean": "euclidean"}
+    if metric not in metric_aliases:
+        raise ValueError("unsupported metric; use 'l2' or 'euclidean'")
+
+    _, n_cover = greedy_epsilon_cover(objects, epsilon,
+                                      dist=metric_aliases[metric])
+    return n_cover
+
+
 def covering_number_curve(A, epsilons):
     """
     Calcule N(A, epsilon) pour une liste de valeurs de epsilon.
@@ -62,8 +79,7 @@ def covering_number_curve(A, epsilons):
     """
     counts = []
     for eps in epsilons:
-        _, n = greedy_epsilon_cover(A, eps)
-        counts.append(n)
+        counts.append(empirical_covering_number(A, eps, metric="l2"))
     return counts
 
 
@@ -76,6 +92,13 @@ def plot_covering_number(epsilons, counts, title="Covering number N(A, ε)"):
     ax.grid(True, linestyle="--", alpha=0.4)
     plt.tight_layout()
     return fig
+
+
+def vc_dimension_linear(d, bias=True):
+    """Retourne la VC-dimension d'un classifieur linéaire en dimension d."""
+    if isinstance(d, bool) or not isinstance(d, (int, np.integer)) or d < 0:
+        raise ValueError("d must be a non-negative integer")
+    return int(d) + 1 if bias else int(d)
 
 
 # ===========================================================================
@@ -193,6 +216,41 @@ class SelfAdaptiveLineSearch:
             self.alpha *= 0.7    # trop d'échecs → réduire davantage
 
         return self.alpha, success
+
+
+def adaptive_epsilon_schedule(t=None, n=None, scale=None, mode="sqrt"):
+    """Retourne un epsilon adaptatif positif selon t ou n."""
+    if t is None and n is None:
+        raise ValueError("at least one of t or n must be provided")
+
+    k = t if t is not None else n
+    if isinstance(k, bool) or not isinstance(k, numbers.Real):
+        raise ValueError("t or n must be a real positive scalar number")
+    if not math.isfinite(k):
+        raise ValueError("t or n must be a finite real positive scalar number")
+    if k <= 0:
+        raise ValueError("t or n must be a real positive scalar number")
+
+    if scale is None:
+        scale = 1.0
+    if isinstance(scale, bool) or not isinstance(scale, numbers.Real):
+        raise ValueError("scale must be a real positive scalar number")
+    if not math.isfinite(scale):
+        raise ValueError("scale must be a finite real positive scalar number")
+    if scale <= 0:
+        raise ValueError("scale must be a real positive scalar number")
+
+    mode = mode.lower()
+    if mode == "sqrt":
+        epsilon = scale / np.sqrt(k)
+    elif mode == "inv":
+        epsilon = scale / k
+    else:
+        raise ValueError("unsupported mode; use 'sqrt' or 'inv'")
+
+    if epsilon <= 0:
+        raise ValueError("adaptive epsilon must be strictly positive")
+    return float(epsilon)
 
 
 # ===========================================================================
